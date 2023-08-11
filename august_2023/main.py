@@ -6,6 +6,7 @@ response = requests.get(url)
 print(response.status_code)
 print(response.text)
 
+# FIXME: Tap "Load more" until the list is fully displayed
 # FIXME: From each exercise's details page, collect the following:
 #  Details page's url
 #  Exercise's name
