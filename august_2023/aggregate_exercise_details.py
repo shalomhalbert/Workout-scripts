@@ -1,23 +1,51 @@
-# FIXME: From each exercise's details page, collect the following:
-#  Details page's url
-#  Exercise's name
-#  Workout type
-#  Main muscle worked
-#  Equipment used
-#  Difficulty level
-#  All images Instructions
+from typing import List
+import requests
+from bs4 import BeautifulSoup
+from exercise import Exercise
 
-# Option #1
-# exercise_finder_list_response = requests.get(url=url)
-# exercise_finder_list_beautiful_soup = BeautifulSoup(markup=exercise_finder_list_response.text, features="html.parser")
-# exercise_finder_list_beautiful_soup.find(name="XXX")
 
-# exercise_web_element = chrome_browser.find_element(by=By.LINK_TEXT, value="Rickshaw Carry")
-# exercise_web_element.click()
-# time.sleep(2)
+def get_exercise_details_urls() -> List[str]:
+    # exercise_details_urls = []
+    # with open('exercise_details_urls.txt') as exercise_details_urls_file:
+    #     for url in exercise_details_urls_file:
+    #         cleaned_url = url.strip()
+    #         exercise_details_urls.append(cleaned_url)
+    #
+    # return exercise_details_urls
 
-# FIXME: Iterate through urls
+    # FIXME: Delete and uncomment code above.
+    return ["https://www.bodybuilding.com/exercises/palms-down-wrist-curl-over-a-bench"]
+
 
 # FIXME: Extract wanted data
+def parse_exercise(exercise_details_url: str) -> Exercise:
+    exercise_details_request = requests.get(exercise_details_url)
+    exercise_details_parser = BeautifulSoup(exercise_details_request.content, "html.parser")
 
-# FIXME: Save data in a csv file for importing into Notion
+    title_element = exercise_details_parser.find(name="h1")
+    title = title_element.text.strip()
+
+    # FIXME: Replace href filter because it is too specific. Can a wildcard be used?
+    primary_muscle_element = exercise_details_parser.find(name="a", href="/exercises/muscle/forearms")
+    primary_muscle = primary_muscle_element.text.strip()
+
+    image_elements = exercise_details_parser.find_all(name="img", class_="ExImg ExDetail-img js-ex-enlarge")
+    image_srcs = []
+    for image_element in image_elements:
+        src = image_element['src'].strip()
+        image_srcs.append(src)
+
+    return Exercise(name=title, primary_muscle=primary_muscle, image_urls=image_srcs)
+
+
+def main():
+    exercise_details_urls = get_exercise_details_urls()
+    exercises = []
+    for exercise_details_url in exercise_details_urls:
+        exercise = parse_exercise(exercise_details_url=exercise_details_url)
+        exercises.append(exercise)
+
+    # FIXME: Save data in a csv file for importing into Notion
+
+
+main()
