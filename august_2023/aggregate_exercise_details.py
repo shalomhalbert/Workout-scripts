@@ -15,3 +15,9 @@
 # exercise_web_element = chrome_browser.find_element(by=By.LINK_TEXT, value="Rickshaw Carry")
 # exercise_web_element.click()
 # time.sleep(2)
+
+# FIXME: Iterate through urls
+
+# FIXME: Extract wanted data
+
+# FIXME: Save data in a csv file for importing into Notion
