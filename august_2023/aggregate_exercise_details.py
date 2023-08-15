@@ -1,5 +1,5 @@
 import time
-from typing import List
+from typing import List, Tuple
 import requests
 from bs4 import BeautifulSoup
 from exercise import Exercise
@@ -14,6 +14,7 @@ def get_exercise_details_urls() -> List[str]:
     #         exercise_details_urls.append(cleaned_url)
     #
     # return exercise_details_urls
+    # FIXME: Delete below and uncomment above.
     return ["https://www.bodybuilding.com/exercises/push-press",
             "https://www.bodybuilding.com/exercises/barbell-glute-bridge"]
 
@@ -35,7 +36,7 @@ def extract_primary_muscle(exercise_details_parser: BeautifulSoup) -> str:
     return "Unknown"
 
 
-def extract_image_urls(exercise_details_parser: BeautifulSoup):
+def extract_image_urls(exercise_details_parser: BeautifulSoup) -> Tuple[str, str]:
     image_elements = exercise_details_parser.find_all(name="img", class_="ExImg ExDetail-img js-ex-enlarge")
     image_srcs = []
 
@@ -62,7 +63,7 @@ def extract_instructions(exercise_details_parser: BeautifulSoup) -> List[str]:
 
 def parse_exercise(exercise_details_url: str) -> Exercise:
     exercise_details_request = requests.get(exercise_details_url)
-    time.sleep(4)
+    time.sleep(1)
     exercise_details_parser = BeautifulSoup(exercise_details_request.content, "html.parser")
 
     name = extract_exercise_name(exercise_details_parser=exercise_details_parser)
@@ -84,7 +85,6 @@ def main():
         exercise = parse_exercise(exercise_details_url=exercise_details_url)
         exercises.append(exercise)
 
-    # FIXME: Save data in a csv file for importing into Notion
     data_frame = pandas.DataFrame(data=exercises)
     data_frame.to_csv(path_or_buf="exercises.csv")
 
