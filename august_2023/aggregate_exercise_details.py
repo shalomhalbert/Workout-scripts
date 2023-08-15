@@ -48,14 +48,18 @@ def extract_instructions(exercise_details_parser: BeautifulSoup) -> str:
     instructions_section_element = exercise_details_parser.find(name="section",
                                                                 class_="ExDetail-section ExDetail-guide")
     instructions_list_element = instructions_section_element.find(name="ol")
-    instructions_elements = instructions_list_element.find_all("li")
 
     instructions = ""
-    for instruction_element in instructions_elements:
-        cleaned_instruction = instruction_element.text.strip()
-        instructions = instructions + " " + cleaned_instruction
+    if instructions_list_element is not None:
+        instructions_elements = instructions_list_element.find_all("li")
 
-    return instructions.strip()
+        for instruction_element in instructions_elements:
+            cleaned_instruction = instruction_element.text.strip()
+            instructions = instructions + " " + cleaned_instruction
+
+        return instructions.strip()
+    else:
+        return instructions
 
 
 def parse_exercise(exercise_details_url: str) -> Exercise:
@@ -76,8 +80,8 @@ def parse_exercise(exercise_details_url: str) -> Exercise:
 def main():
     exercise_details_urls = get_exercise_details_urls()
     exercises = []
-    for exercise_details_url in exercise_details_urls:
-        print("Url: " + exercise_details_url)
+    for index, exercise_details_url in enumerate(exercise_details_urls):
+        print("(" + str(index) + "/344): " + exercise_details_url)
 
         exercise = parse_exercise(exercise_details_url=exercise_details_url)
         exercises.append(exercise)
