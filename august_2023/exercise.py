@@ -2,8 +2,14 @@ from typing import List
 
 
 class Exercise:
-    def __init__(self, name: str, primary_muscle: str, image_urls: List[str], instructions: List[str]):
+    def __init__(self, name: str, primary_muscle: str, start_positioning_image_url: str, end_positioning_image_url: str,
+                 instructions: List[str]):
         self.name = name
         self.primary_muscle = primary_muscle
-        self.image_urls = image_urls
+        self.start_positioning_image_url = start_positioning_image_url
+        self.end_positioning_image_url = end_positioning_image_url
         self.instructions = instructions
+
+    def __iter__(self):
+        return iter([self.name, self.primary_muscle, self.start_positioning_image_url, self.end_positioning_image_url,
+                     self.instructions])
