@@ -7,16 +7,13 @@ import pandas
 
 
 def get_exercise_details_urls() -> List[str]:
-    # exercise_details_urls = []
-    # with open('exercise_details_urls.txt') as exercise_details_urls_file:
-    #     for url in exercise_details_urls_file:
-    #         cleaned_url = url.strip()
-    #         exercise_details_urls.append(cleaned_url)
-    #
-    # return exercise_details_urls
-    # FIXME: Delete below and uncomment above.
-    return ["https://www.bodybuilding.com/exercises/push-press",
-            "https://www.bodybuilding.com/exercises/barbell-glute-bridge"]
+    exercise_details_urls = []
+    with open('exercise_details_urls.txt') as exercise_details_urls_file:
+        for url in exercise_details_urls_file:
+            cleaned_url = url.strip()
+            exercise_details_urls.append(cleaned_url)
+
+    return exercise_details_urls
 
 
 def extract_exercise_name(exercise_details_parser: BeautifulSoup) -> str:
@@ -47,18 +44,18 @@ def extract_image_urls(exercise_details_parser: BeautifulSoup) -> Tuple[str, str
     return image_srcs[0], image_srcs[1]
 
 
-def extract_instructions(exercise_details_parser: BeautifulSoup) -> List[str]:
+def extract_instructions(exercise_details_parser: BeautifulSoup) -> str:
     instructions_section_element = exercise_details_parser.find(name="section",
                                                                 class_="ExDetail-section ExDetail-guide")
     instructions_list_element = instructions_section_element.find(name="ol")
     instructions_elements = instructions_list_element.find_all("li")
 
-    instructions = []
+    instructions = ""
     for instruction_element in instructions_elements:
         cleaned_instruction = instruction_element.text.strip()
-        instructions.append(cleaned_instruction)
+        instructions = instructions + " " + cleaned_instruction
 
-    return instructions
+    return instructions.strip()
 
 
 def parse_exercise(exercise_details_url: str) -> Exercise:

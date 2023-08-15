@@ -3,7 +3,7 @@ from typing import List
 
 class Exercise:
     def __init__(self, name: str, primary_muscle: str, start_positioning_image_url: str, end_positioning_image_url: str,
-                 instructions: List[str]):
+                 instructions: str):
         self.name = name
         self.primary_muscle = primary_muscle
         self.start_positioning_image_url = start_positioning_image_url
